@@ -283,19 +283,17 @@ static VALUE IO_Buffer_read(int argc, VALUE *argv, VALUE self)
 
   if(rb_scan_args(argc, argv, "01", &length_obj) == 1) {
     length = NUM2INT(length_obj);
-  } else {
-    if(buf->size == 0)
-      return rb_str_new2("");
-
-    length = buf->size;
+    if(length < 1)
+      rb_raise(rb_eArgError, "length must be greater than zero");
+    if(length > buf->size)
+      length = buf->size;
   }
-
-  if(length > buf->size)
+  else
     length = buf->size;
 
-  if(length < 1)
-    rb_raise(rb_eArgError, "length must be greater than zero");
-
+  if(buf->size == 0)
+    return rb_str_new2("");
+  
   str = rb_str_new(0, length);
   buffer_read(buf, RSTRING_PTR(str), length);
 
