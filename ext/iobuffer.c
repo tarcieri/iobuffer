@@ -5,13 +5,19 @@
  */
 
 #include "ruby.h"
+#ifdef HAVE_RUBY_IO_H
+#include "ruby/io.h"
+#else
 #include "rubyio.h"
+#endif
 
 #include <assert.h>
 
 #include <string.h>
 #include <time.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <errno.h>
 
 /* 1 GiB maximum buffer size */
